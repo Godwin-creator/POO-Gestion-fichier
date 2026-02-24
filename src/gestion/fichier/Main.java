@@ -1,13 +1,39 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+package gestion.fichier;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+import gestion.fichier.cli.Commande;
+import gestion.fichier.cli.ParseurCommande;
+import gestion.fichier.cli.Navigateur;
+import gestion.fichier.metier.Fichier;
+import java.util.Scanner;
+
+/*
+    Auteur : EDOH BEDI Komi Godwin
+    File : Main
+    Created : 24/02/2026
+ */
+
+public class Main  {
+    private static Scanner clavier = new Scanner(System.in);
+    private static ParseurCommande parseur = new ParseurCommande();
+
+    public static void main(String[] args) {
+        System.out.println("\t\t\t---INVITE DE COMMANDE / Gestion Fichier ---");
+
+        try {
+            Fichier.restaurer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+
+        while (true) {
+            String chemin = "C:\\Users\\EDOHB" + Navigateur.getInstance().getRepertoireCourant().getNomComplet() + ">";
+
+            System.out.println(chemin);
+            String strCmde = clavier.nextLine();
+            Commande commande = parseur.parser(strCmde);
+            commande.executer();
+        }
     }
 }
